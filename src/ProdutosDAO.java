@@ -23,9 +23,33 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
+        conn = new conectaDAO().connectDB();
         
         
-        //conn = new conectaDAO().connectDB();
+        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
+        
+        try {
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, produto.getNome());
+            prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
+            
+            //  Inserção para banco de dados
+            prep.execute();
+            
+            // sucesso
+            JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+            
+        } catch (Exception erro) {
+            // erro
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + erro.getMessage());
+        } finally {
+            // Fecha a conexão por segurança
+            try { if (prep != null) prep.close(); } catch (Exception e) {}
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+        
+     
         
         
     }
